@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView ,TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, FlatList, SafeAreaView ,TouchableOpacity,Keyboard} from 'react-native';
 import Input from './src/components/Input';
 import { Fruits, Fruit } from './src/data/Data';
 import ListItem from './src/components/ListItem';
@@ -10,19 +10,19 @@ const App: FC = () => {
   const [newname, setNewName] = useState<Fruit | null>(null);
   const [newprice, setNewPrice] = useState<Fruit | null>(null);
 
-  useEffect(()=>{
-    setFruit(Fruits)
-  },[])
-
   // useEffect(()=>{
-  //   (()=>{
-  //       setFruits(
-  //         Fruits.sort((a: Fruit, b:Fruit)=>{
-  //           return a.price > b.price ? 1: b.price > a.price ? -1 :0;
-  //         })
-  //         );
-  //   })();
-  // },[]);
+  //   setFruit(Fruits)
+  // },[])
+
+  useEffect(()=>{
+    (()=>{
+        setFruit(
+          Fruits.sort((a: Fruit, b:Fruit)=>{
+            return a.price > b.price ? 1: b.price > a.price ? -1 :0;
+          })
+          );
+    })();
+  },[]);
 
 
   const handleSearch = (text:string) => {
@@ -33,10 +33,11 @@ const App: FC = () => {
    
   }
   
-  const handleAdd = (item:Fruit)=>{
-    console.warn("fruit",item);
-    if(fruit!== null ) setFruit([...fruit, item])
-    // else setFruit([item])
+  const handleAdd = ()=>{
+    Keyboard.dismiss();
+    if(newname !== null &&fruit !== null){
+      setFruit([...fruit,newname])
+    }
   }
 
 
@@ -58,24 +59,26 @@ const App: FC = () => {
           <Input 
                 icon="add-circle-outline" 
                 placeholder="Fruit Name"
+                // value={newname}
                 onChangeText={(text) =>{
-                  if(newname !== null){
-                    setNewName({...newname, names: text})
-                  } 
-                  console.warn("setnewname",newname)
+                 if(newname !== null){
+                  setNewName({...newname, names: text});
+                 }else {
+                   setNewName({id: Date.now(), names: text, price:0});
+                 }
                 }}
                 />
-           {/* <Input 
+           <Input 
                 icon="add-circle-outline" 
                 placeholder="Fruit Price"
                 onChangeText={(text) =>{
-                  if(newprice !== null){
-                    setNewPrice({...newprice, price: +text}) //+to convert it to num
-                  } else{
-                    setNewPrice({id: Date.now(), names: "", price:0})
-                  }
+                  if(newname !== null)
+                  setNewName({...newname,  price: +text}) //+to convert it to num
+                  // } else{
+                  //   setNewPrice({id: Date.now(), names: "", price:0})
+                  // }
                 }}
-                /> */}
+                />
              
            <TouchableOpacity style={{
              alignSelf:'center',
@@ -85,7 +88,7 @@ const App: FC = () => {
              borderRadius:3,
              marginVertical:20,
            }}
-           onPress={(fruits)=>{handleAdd(fruits)}}>
+           onPress={()=>handleAdd()}>
                 <Text 
                   style={{
                     color:'white',
