@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { View, TextInput, StyleSheet } from 'react-native';
 
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const Input: FC<Props> = props => {
+ 
   return (
     <View style={styles.container}>
       <View

@@ -1,33 +1,33 @@
 interface Fruit {
     id: number;
-    name: string;
+    names: string;
     price: number;
   }
   
   const Fruits: Fruit[] = [
     {
       id: 1,
-      name: 'Apple',
+      names: 'Apple',
       price: 10,
     },
     {
       id: 2,
-      name: 'Banana',
+      names: 'Banana',
       price: 5,
     },
     {
       id: 3,
-      name: 'Mango',
+      names: 'Mango',
       price: 20,
     },
     {
       id: 4,
-      name: 'Cherry',
+      names: 'Cherry',
       price: 50,
     },
     {
       id: 5,
-      name: 'Lichi',
+      names: 'Lichi',
       price: 60,
     },
   ];

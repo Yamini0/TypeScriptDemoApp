@@ -5,82 +5,78 @@ import { Fruits, Fruit } from './src/data/Data';
 import ListItem from './src/components/ListItem';
 
 const App: FC = () => {
-  //<typeof>(initialValue)
-  const [fruits, setFruits] = useState<Fruit[] | null>(null);
-  const [inputShown,setInputShown] = useState<boolean>(false);
-  const [newFruit, setNewFruit] = useState<Fruit | null>(null);
+  const [fruit, setFruit] = useState<Fruit[] | null>(null);//<typeof>(initialValue)
+ 
+  const [newname, setNewName] = useState<Fruit | null>(null);
+  const [newprice, setNewPrice] = useState<Fruit | null>(null);
 
   useEffect(()=>{
-    (()=>{
-        setFruits(
-          Fruits.sort((a: Fruit, b:Fruit)=>{
-            return a.price > b.price ? 1: b.price > a.price ? -1 :0;
-          })
-          );
-    })();
-  },[]);
+    setFruit(Fruits)
+  },[])
+
+  // useEffect(()=>{
+  //   (()=>{
+  //       setFruits(
+  //         Fruits.sort((a: Fruit, b:Fruit)=>{
+  //           return a.price > b.price ? 1: b.price > a.price ? -1 :0;
+  //         })
+  //         );
+  //   })();
+  // },[]);
 
 
-  const handleSearch = (text:any) => {
-    const fruits: Fruit[] = Fruits.filter((fruit) => fruit.name.includes(text)
+  const handleSearch = (text:string) => {
+    const alreadyThere: Fruit[] = Fruits.filter((x) => x.names.includes(text)
       );
-    setFruits(fruits);
+    setFruit(alreadyThere);
+    console.log("fruit",alreadyThere);
+   
+  }
+  
+  const handleAdd = (item:Fruit)=>{
+    console.warn("fruit",item);
+    if(fruit!== null ) setFruit([...fruit, item])
+    // else setFruit([item])
   }
 
-  const handleAdd =()=>{
-    if(newFruit !== null && fruits !== null ) setFruits([...fruits, newFruit])
-    else if(newFruit ! == null && fruits == null) setFruits([newFruit])
-  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Input  
         icon="md-search" 
         placeholder="Search" 
          onChangeText={(text)=>handleSearch(text)} />
-       <FlatList
+         {/* data from local json */}
+       <FlatList   
         style={{marginVertical:10}}
-         data={Fruits}
+         data={fruit}
          renderItem={({ item }) => (
-           <ListItem id={item.id} name={item.name} price={item.price} />
+           <ListItem id={item.id} names={item.names} price={item.price} />
          )} />
-         <View>
-           <TouchableOpacity
-            style={{ 
-            alignSelf:'center',
-            backgroundColor:'rgba(81,135,200,1)',
-            padding:10,
-            paddingHorizontal:20,
-            borderRadius:3,
-            marginVertical:20,
-            display:inputShown == false ? 'flex' : 'none',
-          
-          }}
-              onPress={()=>setInputShown(true)}
-            >
-              <Text style={{
-                  color:'white',
-                  fontWeight:'600'
-                }}>  Add </Text>
-           </TouchableOpacity>
-         </View>
-         <View style={{display: inputShown == true ? 'flex' : 'none'}}>
-           <Input icon="add-circle-outline" placeholder="Fruit Name" 
-           onChangeText={(text)=>{
-                if(newFruit ! == null ){
-                  setNewFruit({ ...newFruit, name:text});
-                } else{
-                  setNewFruit({ id: Date.now(), name:text,price:0});
-                }
-              }} />
-           <Input icon="add-circle-outline" placeholder="Fruit Price" 
-           onChangeText={(text)=>{
-            if(newFruit ! == null ){
-              setNewFruit({ ...newFruit, price: +text});
-            } else{
-              setNewFruit({ id: Date.now(), name: "", price : +text});
-            }
-          }} 
-           />
+         
+         
+          <Input 
+                icon="add-circle-outline" 
+                placeholder="Fruit Name"
+                onChangeText={(text) =>{
+                  if(newname !== null){
+                    setNewName({...newname, names: text})
+                  } 
+                  console.warn("setnewname",newname)
+                }}
+                />
+           {/* <Input 
+                icon="add-circle-outline" 
+                placeholder="Fruit Price"
+                onChangeText={(text) =>{
+                  if(newprice !== null){
+                    setNewPrice({...newprice, price: +text}) //+to convert it to num
+                  } else{
+                    setNewPrice({id: Date.now(), names: "", price:0})
+                  }
+                }}
+                /> */}
+             
            <TouchableOpacity style={{
              alignSelf:'center',
              backgroundColor:'rgba(81,135,200,1)',
@@ -89,15 +85,14 @@ const App: FC = () => {
              borderRadius:3,
              marginVertical:20,
            }}
-           onPress={()=>{handleAdd}}
-           >
-                <Text style={{
-                  color:'white',
-                  fontWeight:'600'
-                }}>  Add
-                </Text>
+           onPress={(fruits)=>{handleAdd(fruits)}}>
+                <Text 
+                  style={{
+                    color:'white',
+                    fontWeight:'600'
+                }}>Add</Text>
            </TouchableOpacity>
-         </View>
+         
 
     </SafeAreaView>
 

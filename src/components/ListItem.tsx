@@ -11,7 +11,7 @@ const ListItem: FC<Fruit> = props => {
           ...styles.listItem,
           alignItems: 'flex-start',
         }}>
-        <Text style={{color:'#595959'}}>{props.name}</Text>
+        <Text style={{color:'#595959'}}>{props.names}</Text>
       </View>
       <View
         style={{
